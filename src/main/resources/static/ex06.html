@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<link rel="stylesheet" href="jquery-ui-1.12.1/jquery-ui.min.css">
+<style type="text/css">
+	*{
+		margin:0px;
+		padding:0px;
+	}
+	body{
+		font:62.5%;
+	}
+	.item{
+		margin:3px;
+		padding:5px;
+	}
+	.item > img{
+		width:100px;
+		height:100px;
+	}
+	#wrap{
+		overflow:hidden;
+	}
+	#wrap > div{
+		float:left;
+	}
+	#dock{
+		position:fixed;
+		min-height:120px;
+		width:100%;
+		bottom:0px;
+		z-index:1;
+	}
+	#dock > div{
+		float:right;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var width = window.innerWidth - 50;
+	var height = window.innerHeight - 200;
+	var divlogout = $("<div id='logout'/>");
+	var span = $("<span/>");
+	var logout = $("<span/>").text("로그아웃");
+	var itemArr = [];
+	$(divlogout).append(span, logout);
+	$(divlogout).css("visibility", "hidden");
+	$(logout).click(function(){
+		$("#login").css("visibility", "visible");
+		$("#logout").css("visibility", "hidden");
+		$(span).text("");
+		sessionStorage.clear();
+		$("#dock").empty();
+		$("#wrap").empty();
+		printItems();
+	});
+	$("#member").append(divlogout);
+	$("#btnLogin").click(function(){
+		var id = $("#id").val();
+		var pwd = $("#pwd").val();
+		var member = {
+			id:id
+			, pwd:pwd
+		};
+		$.ajax("login", {data:member, success:function(msg){
+			if(msg == "ok"){
+				sessionStorage.setItem("memberId", $("#id").val());
+// 				alert("로그인되었습니다.");
+				$("#login").css("visibility", "hidden");
+				$("#logout").css("visibility", "visible");
+				$(span).text($("#id").val() + "님 로그인 되었습니다");
+				
+			}else{
+				alert("일치하는 회원이 없습니다.");
+			}
+		}});
+	});
+	$.getJSON("goodsList",function(arr){
+		itemArr = arr;
+		printItems();
+	});
+	
+	function printItems(){
+		$.each(itemArr, function(idx, g){
+			var item = $("<div class='ui-widget-content ui-corner-all item'/>");
+			var gno = $("<p id='gno'/>").html(g.no);
+			var img = $("<img/>").attr("src", "img/" + g.fname);
+			var name = $("<p/>").html(g.item);
+			var price = $("<p/>").html(g.price);
+// 			var qty = $("<p id='qty' />").html(g.qty);
+			var qty = $("<input type='number' class='qty'/>").val(1);
+			$(qty).css("visibility", "hidden");
+			$(item).append(gno, img, name, price, qty);
+			$("#wrap").append(item);
+		});
+		$("#wrap > div").draggable({
+			helper:"clone"			//드래그 후 복제
+			, zIndex:100
+			, scroll:false
+		});
+		$("#dock").droppable({
+			accept:"#wrap > div"	//끌어오는 대상 제한
+			, drop:function(event, ui){
+				$(ui.draggable).fadeOut(function(){	//ui.draggable : 끌고온 요소. fadeOut : 점점 사라지게 하는 효과
+					$(this).appendTo("#dock").fadeIn();		//dock에 추가하고 점점 나타나게 하는 효과
+					$(this).find(".qty").css("visibility", "visible");
+				})		
+			}
+		});
+		$("body").droppable({
+			accept:"#dock > div"	//끌어오는 대상 제한
+			, drop:function(event, ui){
+				$(ui.draggable).fadeOut(function(){	//ui.draggable : 끌고온 요소. fadeOut : 점점 사라지게 하는 효과
+					$(this).appendTo("#wrap").fadeIn();		//wrap에 추가하고 점점 나타나게 하는 효과
+					$(this).find(".qty").val(1);
+					$(this).find(".qty").css("visibility", "hidden");
+				})		
+			}
+		});
+	}
+	console.log($("#dock").css("top"));
+
+// 	$("#addCart").css({position:"absolute", top:$("#dock").css("top"), left:500});
+	$("#addCart").css({position:"absolute", top:height, left:width});
+	
+	$("#addCart").click(function(){
+		var cart = [];
+// 		var memberId = sessionStorage.getItem("memberId");
+// 		console.log(memberId);
+		if(sessionStorage.getItem("memberId") == null){
+			alert("로그인 하세요.");
+			return;
+		}
+		var items = $("#dock > div.item");
+		$.each(items, function(idx, item){
+			console.log(item);
+			var gno = parseInt($(item).children("#gno").html());
+			var qty = parseInt($(item).children(".qty").val());
+			var id = sessionStorage.getItem("memberId");
+			console.log(gno + "/" + qty);
+			var g = {
+				id:id
+// 				, no:0
+				, gno:gno
+				, qty:qty
+			};
+			cart.push(g);
+		});
+		$.each(cart, function(idx, item){
+			console.log(item);
+		});
+		var jsonData = JSON.stringify(cart);
+		$.ajax({
+			url:"insertCart"
+			, type:"POST"
+			, dataType:"json"
+			, data:{"cart":jsonData}
+			, success:function(data){
+			}
+		});
+	});
+});
+</script>
+</head>
+<body>
+	<div id="member"><div id="login">아이디 : <input type="text" id="id"> 비밀번호 : <input type="password" id="pwd"> <button id="btnLogin">로그인</button></div></div>
+	<div id="wrap"></div>
+	<button id="addCart">담기</button>
+	<div id="dock" class="ui-state-error"></div>
+</body>
+</html>

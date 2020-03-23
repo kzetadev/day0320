@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#my_form").submit(function(event){
+		var member = $("#my_form").serializeArray();
+		console.log(member);
+		var str = $.param(member);		//querystring으로 만들어줌. /name="a"&age=20
+		var url = "/ActionWithData?" + str;
+		$("#wrap").load(url);
+		console.log(str);
+		
+		//login.do를 요청하지 않고 RestLoginController클래스의 actionWithData 메소드 실행.
+	/*
+		$.ajax("/ActionWithData", {data:member, success:function(r){
+			$("#wrap").html(r);
+		}});
+	*/
+		event.preventDefault();	//기본 이벤트 제거. 처리를 ajax통신으로 대체할 목적
+	});
+	
+});
+</script>
+</head>
+<body>
+	<form id="my_form" action="login.do" method="post">		<!-- login.do로 이동하는 기본 이벤트 예제. LoginController 클래스의 login.do 요청으로 매핑된 login 메소드가 실행됨. -->
+		<table>
+			<tr>
+				<td><label for="name">Name</label></td>		<!-- for : 어떤 노드를 위한 라벨인지 설정 -->
+				<td><input type="text" id="name" name="name"></td>
+			</tr>
+			<tr>
+				<td><label for="age">Age</label></td>		<!-- for : 어떤 노드를 위한 라벨인지 설정 -->
+				<td><input type="text" id="age" name="age"></td>
+			</tr>
+		</table>
+		<input type="submit" value="Get Ajax String">
+	</form>
+	<div id="wrap"></div>
+</body>
+</html>
