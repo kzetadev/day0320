@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/jquery.jqGrid-4.4.3/css/ui.jqgrid.css">
+<link rel="stylesheet" href="/jquery-ui-1.12.1/jquery-ui.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/jquery.jqGrid-4.4.3/js/i18n/grid.locale-en.js"></script>
+<script type="text/javascript" src="/jquery.jqGrid-4.4.3/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#grid").jqGrid({
+		url:"getBook"
+		, pager:"#pager"		//페이저 노드명(id를 pager로 설정해야 함)
+		, rowNum:10
+		, rowList:[10, 20, 30]
+		, colNames:["bookid", "bookname", "publisher", "price"]	//컬럼명 배열
+		, colModel:[									//컬럼명에 대한 이름, 인덱스, 길이 설정
+			{name:"bookid", index:"bookid", width:50}
+			, {name:"bookname", index:"bookname", width:200}
+			, {name:"publisher", index:"publisher", width:200}
+			, {name:"price", index:"price", width:100}
+		]
+	});
+});
+</script>
+</head>
+<body>
+	<table id="grid"></table>
+	<div id="pager"></div>
+</body>
+</html>
