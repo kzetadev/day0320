@@ -6,4 +6,13 @@
   <select id="selectAll" resultType="bookVo">
     select * from book
   </select>
+  <insert id="insert">
+  	insert into book values(#{bookid}, #{bookname}, #{publisher}, #{price})
+  </insert>
+  <update id="update">
+  	update book set bookname = #{bookname}, publisher = #{publisher}, price = #{price} where bookid = #{bookid}
+  </update>
+  <delete id="delete">
+  	delete from book where bookid = #{bookid}
+  </delete>
 </mapper>

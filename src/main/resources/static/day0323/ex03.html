@@ -3,27 +3,45 @@
 <head>
 <meta charset="EUC-KR">
 <title>Insert title here</title>
-<link rel="stylesheet" href="/jquery.jqGrid-4.4.3/css/ui.jqgrid.css">
+<link rel="stylesheet" href="/jqgrid/css/ui.jqgrid.css">
 <link rel="stylesheet" href="/jquery-ui-1.12.1/jquery-ui.css">
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script type="text/javascript" src="/jquery.jqGrid-4.4.3/js/i18n/grid.locale-en.js"></script>
-<script type="text/javascript" src="/jquery.jqGrid-4.4.3/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="/jqgrid/js/i18n/grid.locale-en.js"></script>
+<script type="text/javascript" src="/jqgrid/js/jquery.jqGrid.min.js"></script>
 <script type="text/javascript" src="/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	var myDlg = {
+		onclickSubmit: function(params){
+			var selectedRow = $("#grid").getGridParam("selrow");
+			rowData = $("#grid").getRowData(seletecRow);
+			return {
+				bookid:rowData.bookid
+			};
+		}
+	};
 	$("#grid").jqGrid({
-		url:"getBook"
-		, pager:"#pager"		//페이저 노드명(id를 pager로 설정해야 함)
+		url:"/getBook"
+		, editurl:"/updateBook"
+		, pager:"#pager"		//페이저로 설정할 노드명(id를 pager로 설정해야 함)
 		, rowNum:10
 		, rowList:[10, 20, 30]
 		, colNames:["bookid", "bookname", "publisher", "price"]	//컬럼명 배열
 		, colModel:[									//컬럼명에 대한 이름, 인덱스, 길이 설정
-			{name:"bookid", index:"bookid", width:50}
-			, {name:"bookname", index:"bookname", width:200}
-			, {name:"publisher", index:"publisher", width:200}
-			, {name:"price", index:"price", width:100}
+			{name:"bookid", index:"bookid", width:50, editable:true}
+			, {name:"bookname", index:"bookname", width:200, editable:true}
+			, {name:"publisher", index:"publisher", width:200, editable:true}
+			, {name:"price", index:"price", width:100, editable:true}
 		]
-	});
+	}).navGrid("#pager", {
+		search:true
+		, edit:true
+		, add:true
+		, del:true
+	}, {}, {}, myDlg);	//1{} : 표시할 버튼 설정
+						//2{} : 추가 버튼 클릭 시 다이얼로그를 기본다이얼로그로 설정
+						//3{} : 수정 버튼 클릭 시 ""
+						//4{} : 삭제 버튼 클릭 시 위에 정의한 myDlg 사용
 });
 </script>
 </head>

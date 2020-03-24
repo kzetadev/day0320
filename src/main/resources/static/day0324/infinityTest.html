@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	
+	$(window).scroll(function(){
+		var sh = $(window).scrollTop() + $(window).height();
+		var dh = $(document).height();
+		console.log( "st:"+  $(window).scrollTop());
+		console.log( "wh:"+  $(window).height());
+		console.log( "sh:"+  sh);
+		console.log( "dh:"+  dh);
+		console.log( "==========================================:");
+		
+	
+		if(sh + 200 > dh){
+			for(var i=0;i<10;i++){
+				var h1 =$("<h1></h1>").html("aaa");
+				$("body").append(h1);
+			}
+		}
+		
+	});
+	
+	
+	for(var i=0;i<20;i++){
+		var h1 =$("<h1></h1>").html("sss");
+		$("body").append(h1);
+	}
+});
+</script>
+</head>
+<body>
+</body>
+</html>

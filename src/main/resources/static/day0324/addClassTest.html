@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/jquery-ui-1.12.1/jquery-ui.min.css">
+<style type="text/css">
+	.reverse{
+		color:white;
+		background-color:black;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript"src="/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+/*	$("div").hover(function(){
+		$(this).addClass("reverse");
+	}, function(){
+		$(this).removeClass("reverse");
+	});
+*/
+	$("div").hover(function(){
+		$(this).addClass("reverse", 1000);		//두번째 매개변수(동작시간)에 지정된 값 동안 서서히 클래스 적용
+	}, function(){
+		$(this).removeClass("reverse", 1000);
+	});
+});
+</script>
+</head>
+<body>
+	<div>
+		<h1>홍길동</h1>
+		<p>홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동</p>	
+	</div>
+	
+	<div>
+		<h1>홍길동</h1>
+		<p>홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동</p>	
+	</div>
+	<div>
+		<h1>홍길동</h1>
+		<p>홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동 홍길동</p>	
+	</div>
+</body>
+</html>

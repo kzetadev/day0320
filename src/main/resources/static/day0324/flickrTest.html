@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/colorbox-master/example3/colorbox.css">
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/colorbox-master/jquery.colorbox.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#search_form").submit(function(event){
+		var url = "https://api.flickr.com/services/feeds/photos_public.gne?jsoncallback=?";
+		$.getJSON(url, $(this).serialize(), function(data){
+			$("#images").empty();
+			$.each(data.items, function(idx, item){
+				var img = $("<img/>").attr("src", item.media.m);
+				var a = $("<a></a>").html(img).attr("href", item.media.m);
+				$(a).colorbox();
+				$("#images").append(a);
+			});
+		});
+		return false;
+	});
+});
+</script>
+</head>
+<body>
+	<h1>플리커 이미지 검색</h1>
+	<form id="search_form">
+		<input type="text" name="tags">
+		<input type="hidden" name="format" value="json">
+		<input type="submit" value="검색">
+	</form>
+	<div id="images">
+	</div>
+</body>
+</html>

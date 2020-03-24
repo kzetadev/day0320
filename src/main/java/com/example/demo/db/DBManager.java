@@ -77,4 +77,25 @@ public class DBManager {
 		session.close();
 		return list;
 	}
+	public static int insertBook(BookVo b) {
+		int re = -1;
+		SqlSession session = factory.openSession(true);
+		re = session.insert("book.insert", b);
+		session.close();
+		return re;
+	}
+	public static int updateBook(BookVo b) {
+		int re = -1;
+		SqlSession session = factory.openSession(true);
+		re = session.update("book.update", b);
+		session.close();
+		return re;
+	}
+	public static int deleteBook(BookVo b) {
+		int re = -1;
+		SqlSession session = factory.openSession(true);
+		re = session.delete("book.delete", b);
+		session.close();
+		return re;
+	}
 }

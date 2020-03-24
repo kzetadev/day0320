@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type="text/css">
+	div{
+		width:50px;
+		height:50px;
+		background-color:orange;
+		position:relative;
+		margin:10px;
+	}
+</style>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.7.0.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("div").animate({
+			left:"+=60"
+		}, 2000).animate({
+			width:"+=60"
+		}, 2000).animate({
+			height:"+=60"
+		}, 2000) 
+		$("button").click(function(){
+			var html = $(this).html()
+			var str = "$('div')."+html
+			eval(str)
+		})
+	})
+</script>
+</head>
+<body>
+	<button>stop()</button>				<!-- false, false 클릭한 순간만 중단 -->
+	<button>stop(true)</button>			<!-- true, false 모든 동작 중단-->
+	<button>stop(false,true)</button>	<!-- 현재 진행중인 동작 중단 후 다음 동작 진행 -->
+	<button>stop(true,true)</button>	<!-- 마지막 동작으로 바로 진행 -->
+	<div></div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	var arr;
+	$.getJSON("/goodsList",function(data){
+		arr = data;
+		listData();
+	});
+	
+	function listData(){
+		$.each(arr, function(idx, g){
+			var div = $("<div></div>");
+			var img = $("<img/>").attr({"src":"/img/"+g.fname,"width":100,"height":100})
+			var p = $("<p></p>").html(g.item + "("+g.price+"원)");
+			$(div).append(img, p);
+			$("#list").append(div);
+		});
+	}
+	
+	$(window).scroll(function(){
+		var sh = $(window).scrollTop() + $(window).height();
+		var dh = $(document).height();
+		console.log($(window).scrollTop() + "/" + $(window).height() + "/" + sh + "/" + dh);
+		if(sh + 200 > dh){
+			listData();	
+		}
+	});	
+
+		
+});
+</script>
+</head>
+<body>
+	<div id="list"></div>
+</body>
+</html>
